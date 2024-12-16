@@ -1,22 +1,25 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
+import rigoImageUrl from "../../img/rigo-baby.jpg";
 import "../../styles/home.css";
 
-export const Home = () => {
+const Login = () => {
   const { store, actions } = useContext(Context);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmitRegister = async (e) => {
+  const handleSubmitLogin = async (e) => {
     e.preventDefault();
-    const response = await actions.register(email, password);
-    // console.log(response);
-    // console.log("email-password", email, password);
-    if (response) {
-      navigate("/login");
+    const isLoggedIn = await actions.login(email, password);
+    if (isLoggedIn) {
+      navigate("/private");
     }
+
+    // const response = await actions.login(email, password);
+    // console.log(response);
+    // console.log("email-password desde login", email, password);
   };
 
   return (
@@ -25,15 +28,15 @@ export const Home = () => {
       style={{ minHeight: "100vh" }}
     >
       <form
-        className="card"
+        className="container card"
         style={{ width: "100%", maxWidth: "500px" }}
-        onSubmit={handleSubmitRegister}
+        onSubmit={handleSubmitLogin}
       >
         <div className="card-body">
-          <h2 className="text-center">Registro</h2>
+          <h2 className="text-center">Login</h2>
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
-              Dirección Email
+              Email address
             </label>
             <input
               type="email"
@@ -44,7 +47,7 @@ export const Home = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <div id="emailHelp" className="form-text">
-              Nunca compartiremos su Email con nadie!
+              We'll never share your email with anyone else.
             </div>
           </div>
           <div className="mb-3">
@@ -59,14 +62,18 @@ export const Home = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
           <button type="submit" className="btn btn-primary">
-            Enviar
+            Submit
           </button>
           <hr className="my-3" />
-          <Link to={"/login"}>Click aquí si ya tienes cuenta {""}</Link>
+          <Link to={"/"}>
+            ¿You don't have a register? {""}
+            <span className="text-primary"> Click here </span>
+          </Link>
         </div>
       </form>
     </div>
   );
 };
+
+export default Login;
